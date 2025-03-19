@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <titl></title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <div class="container">
+        <!-- Inside the container will add an input field for adding tasks, a list to display the tasks, and buttons for adding and removing tasks.-->
+        <div class="todo-header">
+            <h2>To Do List</h2>
+            <img src="/images/notebook.gif" height="50px" />
+        </div>
+
+        <div class="todo-body">
+            <input
+                type="text"
+                id="todoText"
+                class="todo-input"
+                placeholder="Add your items"
+            />
+            <img
+                src="/images/plus.png"
+                alt="+"
+                id="AddUpdateClick"
+                onclick="CreateToDoItems();"
+            />
+        </div>
+    </div>
+    
+</body>
+</html>
