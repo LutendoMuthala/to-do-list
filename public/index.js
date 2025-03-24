@@ -42,14 +42,37 @@ function addTask() {
 // Function to update the displayed task list
 function updateTaskList() {
     const listElement = document.getElementById("list-items");
-    listElement.innerHTML = "";
+    listElement.innerHTML = ""; // Clear the list
 
-    tasks.forEach(task => {
+    tasks.forEach((task, index) => {
         const li = document.createElement("li");
-        li.textContent = task;
+        
+        // Create a checkbox for each task
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox"; // Set checkbox type
+        checkbox.classList.add("task-checkbox"); // Optional: Add a class for styling
+        
+        // Add event listener to handle marking the task as complete
+        checkbox.addEventListener("change", function () {
+            if (checkbox.checked) {
+                li.style.textDecoration = "line-through"; // Mark as complete (strike-through)
+            } else {
+                li.style.textDecoration = "none"; // Unmark (remove strike-through)
+            }
+        });
+
+        // Append checkbox and task text to the <li>
+        li.appendChild(checkbox);
+        li.appendChild(document.createTextNode(task));
+
+        // Append the <li> element to the list
         listElement.appendChild(li);
     });
 }
+
+// Call the updateTaskList function to display tasks
+updateTaskList();
+
 
 // Function to fetch and display the todo list from the backend
 function fetchTodos() {
@@ -72,7 +95,7 @@ function fetchTodos() {
         });
 }
 
-// Function to create a new todo item (if using backend)
+// Function to create a new todo item using backend
 function CreateToDoItems() {
     const todoText = todoValue.value.trim();
 

@@ -72,12 +72,36 @@ body {
   li {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     background: #edeef0;
     margin-bottom: 10px;
     border-radius: 5px;
   }
-  
+   /* Style the checkbox to make it look like a circle */
+   .task-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #000;
+    border-radius: 50%; /* Make it circular */
+    margin-right: 10px; 
+    cursor: pointer;
+    appearance: none; 
+  }
+
+  /* When the checkbox is checked, add a checkmark */
+  .task-checkbox:checked {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+    position: relative;
+  }
+  .task-checkbox:checked::after {
+    content: '✔';
+    position: absolute;
+    top: 0;
+    left: 5px;
+    color: white;
+    font-size: 14px;
+  }
   h5 {
     text-align: center;
     margin-bottom: 10px;
