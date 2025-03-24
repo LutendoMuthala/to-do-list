@@ -60,13 +60,23 @@ function updateTaskList() {
                 li.style.textDecoration = "none"; // Unmark (remove strike-through)
             }
         });
-
+        
         // Append checkbox and task text to the <li>
         li.appendChild(checkbox);
         li.appendChild(document.createTextNode(task));
 
         // Append the <li> element to the list
         listElement.appendChild(li);
+
+        // Create Delete button
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.className = 'button delete-button';
+    deleteButton.onclick = function () {
+        li.remove();
+    };
+    li.appendChild(deleteButton);
+
     });
 }
 
