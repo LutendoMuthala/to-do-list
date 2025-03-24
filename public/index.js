@@ -1,20 +1,25 @@
+
 // Get references to the HTML elements
 const todoValue = document.getElementById("todoText");
 const todoAlert = document.getElementById("Alert");
 const listItems = document.getElementById("list-items");
-const addUpdate = document.getElementById("addButton");
+const addUpdate = document.getElementById("addButton"); // The "Add task" button
 
 // Fetch the current todo list when the page loads
 window.onload = function() {
     fetchTodos();
 };
 
-let tasks = [];
+//Array to store tasks
+let tasks = []
+
+// Add event listener for the 'Add task' button
+addUpdate.addEventListener("click", addTask);
 
 // Function to add task
 function addTask() {
-    const taskText = document.getElementById("todoText").value.trim();
-    const alertElement = document.getElementById("Alert");
+    const taskText = todoValue.value.trim();
+    const alertElement = todoAlert;
 
     if (taskText === "") {
         // Show alert if input is empty
@@ -24,7 +29,10 @@ function addTask() {
         tasks.push(taskText);
 
         // Clear the input field
-        document.getElementById("todoText").value = "";
+        todoValue.value = "";
+
+        // Clear any previous alerts
+        todoAlert.textContent = "";
 
         // Update the task list display
         updateTaskList();
@@ -64,7 +72,7 @@ function fetchTodos() {
         });
 }
 
-// Function to create a new todo item
+// Function to create a new todo item (if using backend)
 function CreateToDoItems() {
     const todoText = todoValue.value.trim();
 
