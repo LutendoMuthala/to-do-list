@@ -11,7 +11,7 @@ window.onload = function() {
 };
 
 //Array to store tasks
-let tasks = []
+let tasks = [];
 
 // Add event listener for the 'Add task' button
 addUpdate.addEventListener("click", addTask);
@@ -46,43 +46,66 @@ function updateTaskList() {
 
     tasks.forEach((task, index) => {
         const li = document.createElement("li");
-        
+        li.classList.add("task-item");
+
         // Create a checkbox for each task
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox"; // Set checkbox type
-        checkbox.classList.add("task-checkbox"); // Optional: Add a class for styling
+        checkbox.classList.add("task-checkbox"); 
         
         // Add event listener to handle marking the task as complete
         checkbox.addEventListener("change", function () {
             if (checkbox.checked) {
-                li.style.textDecoration = "line-through"; // Mark as complete (strike-through)
+                li.style.textDecoration = "line-through"; // Mark as complete 
             } else {
-                li.style.textDecoration = "none"; // Unmark (remove strike-through)
+                li.style.textDecoration = "none"; // Unmark 
             }
         });
         
-        // Append checkbox and task text to the <li>
+        // Task text
+        const taskContent = document.createElement("span");
+        taskContent.textContent = task;
+
+        // Task actions  for Edit and Delete buttons
+        const taskActions = document.createElement("div");
+        taskActions.classList.add("task-actions");
+
+        // Edit icon
+        const editIcon = document.createElement("i");
+        editIcon.classList.add("fas", "fa-edit", "edit-icon");
+        editIcon.onclick = function() { editTask(taskContent, task); };
+
+        // Delete icon
+        const deleteIcon = document.createElement("i");
+        deleteIcon.classList.add("fas", "fa-trash", "delete-icon");
+        deleteIcon.onclick = function() { deleteTask(li, index); };
+
+        taskActions.appendChild(editIcon);
+        taskActions.appendChild(deleteIcon);
+
+        // Append checkbox, task content, and actions to the <li>
         li.appendChild(checkbox);
-        li.appendChild(document.createTextNode(task));
+        li.appendChild(taskContent);
+        li.appendChild(taskActions);
 
-        // Append the <li> element to the list
+        // Add the <li> element to the list
         listElement.appendChild(li);
-
-        // Create Delete button
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Delete';
-    deleteButton.className = 'button delete-button';
-    deleteButton.onclick = function () {
-        li.remove();
-    };
-    li.appendChild(deleteButton);
-
     });
 }
 
-// Call the updateTaskList function to display tasks
-updateTaskList();
+// Function to edit a task
+function editTask(taskContent, oldText) {
+    const newText = prompt("Edit your task:", oldText);
+    if (newText !== null && newText.trim() !== "") {
+        taskContent.textContent = newText.trim();
+    }
+}
 
+// Function to delete a task
+function deleteTask(taskItem, index) {
+    tasks.splice(index, 1); // Remove the task from the tasks array
+    taskItem.remove(); // Remove the task from the interface
+}
 
 // Function to fetch and display the todo list from the backend
 function fetchTodos() {
@@ -90,13 +113,41 @@ function fetchTodos() {
         .then((response) => response.json())
         .then((todos) => {
             listItems.innerHTML = ''; // Clear the list before displaying updated tasks
-            todos.forEach((todo) => {
+            todos.forEach((todo, index) => {
                 const li = document.createElement("li");
-                li.innerHTML = `<div title="Hit Double Click and Complete" ondblclick="CompletedToDoItems(this)">${todo.item}</div>
-                                <div>
-                                    <img class="edit todo-controls" onclick="UpdateToDoItems(this)" src="/images/pencil.png" />
-                                    <img class="delete todo-controls" onclick="DeleteToDoItems(this)" src="/images/delete.png" />
-                                </div>`;
+                li.classList.add("task-item");
+
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.addEventListener("change", () => {
+                    if (checkbox.checked) {
+                        li.style.textDecoration = "line-through";
+                    } else {
+                        li.style.textDecoration = "none";
+                    }
+                });
+
+                const taskContent = document.createElement("span");
+                taskContent.textContent = todo.item;
+
+                const taskActions = document.createElement("div");
+                taskActions.classList.add("task-actions");
+
+                const editIcon = document.createElement("i");
+                editIcon.classList.add("fas", "fa-edit", "edit-icon");
+                editIcon.onclick = function() { editTask(taskContent, todo.item); };
+
+                const deleteIcon = document.createElement("i");
+                deleteIcon.classList.add("fas", "fa-trash", "delete-icon");
+                deleteIcon.onclick = function() { deleteTask(li, index); };
+
+                taskActions.appendChild(editIcon);
+                taskActions.appendChild(deleteIcon);
+
+                li.appendChild(checkbox);
+                li.appendChild(taskContent);
+                li.appendChild(taskActions);
+
                 listItems.appendChild(li);
             });
         })
@@ -106,7 +157,7 @@ function fetchTodos() {
 }
 
 // Function to create a new todo item using backend
-function CreateToDoItems() {
+function createToDoItems() {
     const todoText = todoValue.value.trim();
 
     if (todoText === "") {
@@ -126,8 +177,8 @@ function CreateToDoItems() {
         .then((response) => response.json())
         .then((data) => {
             if (data.message === "Todo item Created Successfully!") {
-                // Add new task to the UI and clear the input field
-                fetchTodos(); // Re-fetch the tasks to update the UI
+                // Add new task to the interface and clear the input field
+                fetchTodos(); // Re-fetch the tasks to update the user interface
                 todoValue.value = "";
                 todoAlert.innerText = data.message;
             } else {

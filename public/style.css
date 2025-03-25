@@ -72,25 +72,30 @@ body {
   li {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     background: #edeef0;
     margin-bottom: 10px;
     border-radius: 5px;
   }
 
-.delete-button {
-    background-color:#78c1f3;;
-    color: white;
-    text-align: right;
-    margin-left: 340px;
-    border-radius: 50%;
-    border: none;
-    width: 50px;
-    height: 30px;
+  .task-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .task-actions i {
+    cursor: pointer;
+    font-size: 20px;
+  }
+  
+  .task-actions .edit-icon {
+    color: #f39c12;
+  }
+  
+  .task-actions .delete-icon {
+    color: #e74c3c;
+  }
 
-    
-    
-}
    /* Style the checkbox to make it look like a circle */
    .task-checkbox {
     width: 20px;

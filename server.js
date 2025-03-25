@@ -8,7 +8,7 @@ const port = 3000;
 app.use(express.static(path.join(__dirname, "public"))); // Serve static files 
 
 let todo = [];
-const todoFilePath = path.join(__dirname, "todo-list.json");
+const todoFilePath = path.join(__dirname, "package.json");
 
 // Load todo list from file
 try {
@@ -50,7 +50,7 @@ app.post("/todos", (req, res) => {
   const newItem = { item: todoText, status: false };
   todo.push(newItem);
 
-  // Save to the file (acting like localStorage)
+  // Saving to the file 
   fs.writeFileSync(todoFilePath, JSON.stringify(todo, null, 2), "utf-8");
 
   res.status(201).json({ message: "Todo item Created Successfully!" });
