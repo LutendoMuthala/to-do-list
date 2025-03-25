@@ -108,6 +108,7 @@ function deleteTask(taskItem, index) {
 }
 
 // Function to fetch and display the todo list from the backend
+/
 function fetchTodos() {
     fetch("/todos")
         .then((response) => response.json())
@@ -117,33 +118,37 @@ function fetchTodos() {
                 const li = document.createElement("li");
                 li.classList.add("task-item");
 
+                // Create the checkbox
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
+                checkbox.checked = todo.status; // Set task completion based on status
                 checkbox.addEventListener("change", () => {
-                    if (checkbox.checked) {
-                        li.style.textDecoration = "line-through";
-                    } else {
-                        li.style.textDecoration = "none";
-                    }
+                    updateTaskStatus(index, checkbox.checked); // Update status in backend
+                    li.style.textDecoration = checkbox.checked ? "line-through" : "none"; // Strike-through on completion
                 });
 
+                // Task text
                 const taskContent = document.createElement("span");
                 taskContent.textContent = todo.item;
 
+                // Task actions (Edit and Delete buttons)
                 const taskActions = document.createElement("div");
                 taskActions.classList.add("task-actions");
 
+                // Edit icon
                 const editIcon = document.createElement("i");
                 editIcon.classList.add("fas", "fa-edit", "edit-icon");
-                editIcon.onclick = function() { editTask(taskContent, todo.item); };
+                editIcon.onclick = function() { editTask(taskContent, todo.item, index); };
 
+                // Delete icon
                 const deleteIcon = document.createElement("i");
                 deleteIcon.classList.add("fas", "fa-trash", "delete-icon");
-                deleteIcon.onclick = function() { deleteTask(li, index); };
+                deleteIcon.onclick = function() { deleteTask(index); };
 
                 taskActions.appendChild(editIcon);
                 taskActions.appendChild(deleteIcon);
 
+                // Append checkbox, task content, and actions
                 li.appendChild(checkbox);
                 li.appendChild(taskContent);
                 li.appendChild(taskActions);
@@ -155,6 +160,7 @@ function fetchTodos() {
             todoAlert.innerText = "Error loading todo list!";
         });
 }
+
 
 // Function to create a new todo item using backend
 function createToDoItems() {
