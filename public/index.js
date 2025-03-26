@@ -108,7 +108,7 @@ function deleteTask(taskItem, index) {
 }
 
 // Function to fetch and display the todo list from the backend
-/
+
 function fetchTodos() {
     fetch("/todos")
         .then((response) => response.json())
