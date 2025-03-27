@@ -66,7 +66,7 @@ app.put("/todos/:index", (req, res) => {
     return res.status(404).json({ message: "Task not found!" });
   }
 
-  // Update the task content or status
+  // Update the task status
   if (item !== undefined) {
     todo[index].item = item;
   }

@@ -9,7 +9,6 @@ const addUpdate = document.getElementById("addButton"); // The "Add task" button
 window.onload = function() {
     fetchTodos();
 };
-
 //Array to store tasks
 let tasks = [];
 
@@ -36,6 +35,7 @@ function addTask() {
 
         // Update the task list display
         updateTaskList();
+
     }
 }
 
@@ -53,7 +53,7 @@ function updateTaskList() {
         checkbox.type = "checkbox"; // Set checkbox type
         checkbox.classList.add("task-checkbox"); 
         
-        // Add event listener to handle marking the task as complete
+        // Adding event listener to handle marking the task as complete
         checkbox.addEventListener("change", function () {
             if (checkbox.checked) {
                 li.style.textDecoration = "line-through"; // Mark as complete 
@@ -158,6 +158,7 @@ function fetchTodos() {
         })
         .catch((error) => {
             todoAlert.innerText = "Error loading todo list!";
+            fetchTodos();
         });
 }
 
@@ -189,6 +190,8 @@ function createToDoItems() {
                 todoAlert.innerText = data.message;
             } else {
                 todoAlert.innerText = data.message;
+        // Call the function that communicates with the  
+        createToDoItems();
             }
         })
         .catch((error) => {
