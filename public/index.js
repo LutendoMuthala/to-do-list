@@ -9,8 +9,9 @@ const addUpdate = document.getElementById("addButton"); // The "Add task" button
 window.onload = function() {
     fetchTodos();
 };
-//Array to store tasks
-let tasks = [];
+
+// Fetch the tasks from localStorage or initialize an empty array
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
 // Add event listener for the 'Add task' button
 addUpdate.addEventListener("click", addTask);
@@ -25,7 +26,10 @@ function addTask() {
         alertElement.textContent = "Please enter a task!";
     } else {
         // Add task to the list
-        tasks.push(taskText);
+        tasks.push({ item: taskText, status: false });
+
+        // Save updated tasks to localStorage
+        localStorage.setItem('tasks', JSON.stringify(tasks));
 
         // Clear the input field
         todoValue.value = "";
@@ -35,14 +39,12 @@ function addTask() {
 
         // Update the task list display
         updateTaskList();
-
     }
 }
 
 // Function to update the displayed task list
 function updateTaskList() {
-    const listElement = document.getElementById("list-items");
-    listElement.innerHTML = ""; // Clear the list
+    listItems.innerHTML = ""; // Clear the list
 
     tasks.forEach((task, index) => {
         const li = document.createElement("li");
@@ -51,34 +53,32 @@ function updateTaskList() {
         // Create a checkbox for each task
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox"; // Set checkbox type
-        checkbox.classList.add("task-checkbox"); 
-        
+        checkbox.checked = task.status; // Set task completion based on status
+
         // Adding event listener to handle marking the task as complete
         checkbox.addEventListener("change", function () {
-            if (checkbox.checked) {
-                li.style.textDecoration = "line-through"; // Mark as complete 
-            } else {
-                li.style.textDecoration = "none"; // Unmark 
-            }
+            task.status = checkbox.checked; // Update status in task
+            localStorage.setItem('tasks', JSON.stringify(tasks)); // Save updated status
+            li.style.textDecoration = checkbox.checked ? "line-through" : "none"; // Strike-through on completion
         });
-        
+
         // Task text
         const taskContent = document.createElement("span");
-        taskContent.textContent = task;
+        taskContent.textContent = task.item;
 
-        // Task actions  for Edit and Delete buttons
+        // Task actions for Edit and Delete buttons
         const taskActions = document.createElement("div");
         taskActions.classList.add("task-actions");
 
         // Edit icon
         const editIcon = document.createElement("i");
         editIcon.classList.add("fas", "fa-edit", "edit-icon");
-        editIcon.onclick = function() { editTask(taskContent, task); };
+        editIcon.onclick = function() { editTask(taskContent, task.item, index); };
 
         // Delete icon
         const deleteIcon = document.createElement("i");
         deleteIcon.classList.add("fas", "fa-trash", "delete-icon");
-        deleteIcon.onclick = function() { deleteTask(li, index); };
+        deleteIcon.onclick = function() { deleteTask(index); };
 
         taskActions.appendChild(editIcon);
         taskActions.appendChild(deleteIcon);
@@ -89,112 +89,33 @@ function updateTaskList() {
         li.appendChild(taskActions);
 
         // Add the <li> element to the list
-        listElement.appendChild(li);
+        listItems.appendChild(li);
+
+        // Strike-through if the task is completed
+        if (task.status) {
+            li.style.textDecoration = "line-through";
+        }
     });
 }
 
 // Function to edit a task
-function editTask(taskContent, oldText) {
+function editTask(taskContent, oldText, index) {
     const newText = prompt("Edit your task:", oldText);
     if (newText !== null && newText.trim() !== "") {
-        taskContent.textContent = newText.trim();
+        tasks[index].item = newText.trim(); // Update the task text in the array
+        localStorage.setItem('tasks', JSON.stringify(tasks)); // Save updated tasks to localStorage
+        taskContent.textContent = newText.trim(); // Update the task display
     }
 }
 
 // Function to delete a task
-function deleteTask(taskItem, index) {
+function deleteTask(index) {
     tasks.splice(index, 1); // Remove the task from the tasks array
-    taskItem.remove(); // Remove the task from the interface
+    localStorage.setItem('tasks', JSON.stringify(tasks)); // Save updated tasks to localStorage
+    updateTaskList(); // Update the list display
 }
 
-// Function to fetch and display the todo list from the backend
-
+// Function to fetch and display the todo list from localStorage
 function fetchTodos() {
-    fetch("/todos")
-        .then((response) => response.json())
-        .then((todos) => {
-            listItems.innerHTML = ''; // Clear the list before displaying updated tasks
-            todos.forEach((todo, index) => {
-                const li = document.createElement("li");
-                li.classList.add("task-item");
-
-                // Create the checkbox
-                const checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-                checkbox.checked = todo.status; // Set task completion based on status
-                checkbox.addEventListener("change", () => {
-                    updateTaskStatus(index, checkbox.checked); // Update status in backend
-                    li.style.textDecoration = checkbox.checked ? "line-through" : "none"; // Strike-through on completion
-                });
-
-                // Task text
-                const taskContent = document.createElement("span");
-                taskContent.textContent = todo.item;
-
-                // Task actions (Edit and Delete buttons)
-                const taskActions = document.createElement("div");
-                taskActions.classList.add("task-actions");
-
-                // Edit icon
-                const editIcon = document.createElement("i");
-                editIcon.classList.add("fas", "fa-edit", "edit-icon");
-                editIcon.onclick = function() { editTask(taskContent, todo.item, index); };
-
-                // Delete icon
-                const deleteIcon = document.createElement("i");
-                deleteIcon.classList.add("fas", "fa-trash", "delete-icon");
-                deleteIcon.onclick = function() { deleteTask(index); };
-
-                taskActions.appendChild(editIcon);
-                taskActions.appendChild(deleteIcon);
-
-                // Append checkbox, task content, and actions
-                li.appendChild(checkbox);
-                li.appendChild(taskContent);
-                li.appendChild(taskActions);
-
-                listItems.appendChild(li);
-            });
-        })
-        .catch((error) => {
-            todoAlert.innerText = "Error loading todo list!";
-            fetchTodos();
-        });
-}
-
-
-// Function to create a new todo item using backend
-function createToDoItems() {
-    const todoText = todoValue.value.trim();
-
-    if (todoText === "") {
-        todoAlert.innerText = "Please enter your task!";
-        todoValue.focus();
-        return;
-    }
-
-    // Send the new todo item to the backend
-    fetch("/todos", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ todoText })
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.message === "Todo item Created Successfully!") {
-                // Add new task to the interface and clear the input field
-                fetchTodos(); // Re-fetch the tasks to update the user interface
-                todoValue.value = "";
-                todoAlert.innerText = data.message;
-            } else {
-                todoAlert.innerText = data.message;
-        // Call the function that communicates with the  
-        createToDoItems();
-            }
-        })
-        .catch((error) => {
-            todoAlert.innerText = "Error adding task!";
-        });
+    updateTaskList(); // Directly update the task list from localStorage
 }
