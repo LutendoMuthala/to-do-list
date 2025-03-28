@@ -13,7 +13,7 @@ window.onload = function() {
 // Fetch the tasks from localStorage or initialize an empty array
 let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
-// Add event listener for the 'Add task' button
+// Add event listener for the Add task button
 addUpdate.addEventListener("click", addTask);
 
 // Function to add task

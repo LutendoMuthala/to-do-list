@@ -96,31 +96,39 @@ body {
     color: #e74c3c;
   }
 
-   /* Style the checkbox to make it look like a circle */
-   .task-checkbox {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #000;
-    border-radius: 50%; /* Make it circular */
-    margin-right: 10px; 
-    cursor: pointer;
-    appearance: none; 
-  }
+  /* Style the checkbox to make it look like a circle */
+.task-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #000;
+  border-radius: 50%; 
+  margin-right: 10px;
+  cursor: pointer;
+  appearance: none; 
+  background-color: green; /* Default background color */
+  position: relative;
+}
 
-  /* When the checkbox is checked, add a checkmark */
-  .task-checkbox:checked {
-    background-color: #4CAF50;
-    border-color: #4CAF50;
-    position: relative;
-  }
-  .task-checkbox:checked::after {
-    content: '✔';
-    position: absolute;
-    top: 0;
-    left: 5px;
-    color: white;
-    font-size: 14px;
-  }
+/* When the checkbox is checked, add a green background color */
+.task-checkbox:checked {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
+}
+
+/* Create a checkmark when the checkbox is checked */
+.task-checkbox:checked::after {
+  content: '✔';
+  position: absolute;
+  top: 0;
+  left: 5px;
+  color: white;
+  font-size: 14px;
+  line-height: 20px; /* Center the checkmark vertically */
+}
+.task-checkbox:hover {
+  background-color: #e0e0e0;
+}
+
   h5 {
     text-align: center;
     margin-bottom: 10px;
