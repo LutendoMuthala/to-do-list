@@ -2,6 +2,9 @@
 
 A simple to do list app where users can add, edit, or delete tasks. The tasks are saved on the backend using a Node.js server.
 
+##Live Demo##
+https://lutendomuthala.github.io/to-do-list/public/
+
 ## Features
 
 - **Add a Task**: Add new tasks with a description.
