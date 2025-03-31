@@ -142,3 +142,78 @@ body {
     margin-right: 5px;
   }
 
+/* For mobile screens (up to 480px width) */
+@media screen and (max-width: 480px) {
+  .container {
+    width: 90%; /* Make the container width 90% of the screen */
+    padding: 15px;
+  }
+
+  .todo-header {
+    margin-bottom: 15px; /* Reduce margin */
+  }
+
+  .todo-body {
+    flex-direction: column; /* Stack input and button vertically */
+    align-items: stretch; /* Stretch both input and button */
+  }
+
+  .todo-body input {
+    padding: 10px 0; /* Reduce padding for smaller screens */
+    font-size: 16px; /* Make the font smaller */
+  }
+
+  .todo-body button {
+    padding: 12px 15px; /* Reduce button padding */
+    font-size: 16px; /* Adjust font size for smaller screens */
+  }
+
+  ul li {
+    font-size: 16px; /* Make the font size smaller */
+    padding: 8px; /* Reduce padding inside list items */
+  }
+
+  .task-actions i {
+    font-size: 18px; /* Reduce the icon size */
+  }
+
+  h5 {
+    font-size: 18px; /* Reduce the header size */
+  }
+
+  .todo-controls {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* For larger mobile screens (up to 768px width) */
+@media screen and (max-width: 768px) {
+  .container {
+    width: 85%; /* Reduce container width slightly */
+  }
+
+  .todo-body {
+    flex-direction: row; /* Keep the input and button side by side */
+  }
+
+  .todo-body input {
+    font-size: 18px; /* Slightly larger font size for tablet screens */
+  }
+
+  .todo-body button {
+    font-size: 18px;
+  }
+
+  ul li {
+    font-size: 17px; /* Make the font size slightly larger */
+  }
+
+  .task-actions i {
+    font-size: 19px; /* Increase icon size slightly */
+  }
+
+  h5 {
+    font-size: 20px; /* Make the header slightly bigger */
+  }
+}
