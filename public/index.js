@@ -26,7 +26,7 @@ function addTask() {
         alertElement.textContent = "Please enter a task!";
     } else {
         // Add task to the list
-        tasks.push({ item: taskText, status: false });
+        tasks.push({ item: taskText, status: false, priority: "medium"});
 
         // Save updated tasks to localStorage
         localStorage.setItem('tasks', JSON.stringify(tasks));
@@ -62,6 +62,7 @@ function updateTaskList() {
             li.style.textDecoration = checkbox.checked ? "line-through" : "none"; // Strike-through on completion
         });
 
+        
         // Task text
         const taskContent = document.createElement("span");
         taskContent.textContent = task.item;
